@@ -6,7 +6,8 @@ import pandas as pd
 
 class Utils:
 
-    def standardize_data(self, data: pd.DataFrame):
+    @staticmethod
+    def standardize_data(data: pd.DataFrame):
         """
         Standardizes Pandas DataFrame
 
@@ -15,7 +16,8 @@ class Utils:
         for col in data.columns:
             data[col] = (data[col] - np.mean(data[col]))/ np.std(data[col])
 
-    def vectorize_dataframe(self, data: pd.DataFrame):
+    @staticmethod
+    def vectorize_dataframe(data: pd.DataFrame):
         """
         vectorizes a pandas dataframe
 
@@ -24,15 +26,8 @@ class Utils:
         """
         return data.to_numpy()
 
-    def compute_covariance_matrix(self, X: np.ndarray):
-        """
-        Computes the covariance matrix for a given matrix
-
-        :return: computes the covariance of a given numpy array
-        """
-        return np.cov(X)
-
-    def singular_value_decomposition(self, data: np.ndarray):
+    @staticmethod
+    def singular_value_decomposition(data: np.ndarray):
         """
         Performs Singular Value Decomposition on a numpy array
 
@@ -40,16 +35,17 @@ class Utils:
         :return: an mxn numpy array eigenvectors, which consists of the eigenvectors of X_transpose * X.
         """
         try:
-            U,S,V_trans = np.linalg.svd(data)
+            U,singular_vals,V_trans = np.linalg.svd(data)
             eigenvectors_xtx = np.transpose(V_trans)
-            return eigenvectors_xtx
+            return singular_vals, eigenvectors_xtx
 
         except np.linalg.LinAlgError:
             print('SVD computation did not converge.')
             print('Please ensure you are using a full m x n matrix, and please try again.')
             raise AttributeError
 
-    def compute_eigenvector(self, data: np.ndarray):
+    @staticmethod
+    def compute_eigenvector(data: np.ndarray):
         """
         computes the eigenvectors of a single square array
 
@@ -68,8 +64,33 @@ class Utils:
         # Returning eigenvectors
         return vectors
 
-    def compute_principal_components_with_svd(self):
-        pass
+    @staticmethod
+    def compute_principal_components_with_svd(data: np.ndarray = None):
+        """
+        Computes principal components using the svd function defined earlier.
 
-    def compute_principal_components_with_diagonalization(self):
-        pass
+        :param data: an m x n input array for which to compute principle component values
+        :return: the principle components for the data array using SVD
+        (effectively the eigenvectors of data_transpose * data)
+        """
+        if data is None:
+            raise AttributeError("no data was given")
+        else:
+            singular_vals, principal_components = Utils.singular_value_decomposition(data)
+            return principal_components
+
+    @staticmethod
+    def compute_principal_components_with_diagonalization(data: np.ndarray = None):
+        """
+        :param data: an input for which to compute principle component values
+        :return: the principal components using the diagonalization method
+        """
+        if data is None:
+            raise AttributeError("No data was given")
+        else:
+            # Our principle components are the eigenvalue diagonalization of the variance covariance matrix
+            final_result = eig(data * data.transpose())
+            
+        return final_result
+
+
