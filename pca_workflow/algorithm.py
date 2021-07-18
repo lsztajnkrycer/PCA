@@ -28,12 +28,20 @@ class PCA:
         """
         return copy.deepcopy(self)
 
+    def __str__(self,):
+        return "PCA model with attributes of: n_components - " + str(self.n_components) + ", implementation: " + str(self.workflow)
+
     def fit(self, data: pd.DataFrame):
         """
         Computes principle components for a given model, based on user selection of workflow
         """
         # Attributing
         self.data = data
+        try:
+            assert isinstance(data, pd.DataFrame) and data is not None and len(data.columns) > 0, "Must provide data as viable DataFrame"
+        # Raising so as to be caught by tests
+        except AssertionError as error:
+            raise AssertionError(error.__str__())
 
         # Standardizing and vectorizing
         self.data = Utils.standardize_data(self.data)
@@ -73,5 +81,5 @@ class PCA:
         if data is None:
             data = self.data
 
-        transformed = (self._principal_components.transpose() * self.data.transpose())
+        transformed = np.matmul(self.data.transpose(), self._principal_components.transpose())
         return transformed

@@ -19,9 +19,13 @@ class Workflow:
 
         # Instantiating PCA Model
         model = PCA(n_components = 2, workflow = "SVD")
+        print(model)
 
         model.fit(input)
 
         new_data = model.transform()
         
         return new_data
+    
+    
+

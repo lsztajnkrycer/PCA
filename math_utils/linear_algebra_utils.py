@@ -2,30 +2,38 @@ import typing
 import numpy as np
 from numpy.linalg import eig
 import pandas as pd
+from typing import Union
 
 
 class Utils:
 
     @staticmethod
-    def standardize_data(data: pd.DataFrame) -> pd.DataFrame:
+    def standardize_data(data: Union[pd.DataFrame, np.array]) -> pd.DataFrame:
         """
         Standardizes Pandas DataFrame
 
         :param data: a Pandas DataFrame to standardize
         """
-        for col in data.columns:
-            data[col] = (data[col] - np.mean(data[col]))/ np.std(data[col])
+        assert data is not None, "Only in Pandas DataFrames are acceptable"
+
+        if isinstance(data, pd.DataFrame):
+            for col in data.columns:
+                data[col] = (data[col] - np.mean(data[col]))/ np.std(data[col])
+        else:
+            data = data - np.mean(data) / np.std(data)
 
         return data
 
     @staticmethod
-    def vectorize_dataframe(data: pd.DataFrame) -> np.ndarray:
+    def vectorize_dataframe(data: Union[np.ndarray, pd.DataFrame]) -> np.ndarray:
         """
         vectorizes a pandas DataFrame. If given a numpy array to start with, returns the data as is.
 
         :param data: a pandas dataframe input
         :return: a numpy vectorization
         """
+        assert data is not None,"Data must be given"
+
         if isinstance(data, pd.DataFrame):
             return data.to_numpy()
         elif isinstance(data, np.ndarray):
