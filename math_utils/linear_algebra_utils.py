@@ -16,6 +16,8 @@ class Utils:
         for col in data.columns:
             data[col] = (data[col] - np.mean(data[col]))/ np.std(data[col])
 
+        return data
+
     @staticmethod
     def vectorize_dataframe(data: pd.DataFrame) -> np.ndarray:
         """
@@ -24,9 +26,9 @@ class Utils:
         :param data: a pandas dataframe input
         :return: a numpy vectorization
         """
-        if type(data) == pandas.core.frame.DataFrame:
+        if isinstance(data, pd.DataFrame):
             return data.to_numpy()
-        elif type(data) == np.ndarray:
+        elif isinstance(data, np.ndarray):
             return data
         else:
             raise AttributeError("Please input a pandas DataFrame or numpy array.")
@@ -95,7 +97,7 @@ class Utils:
         else:
             # Our principle components are the eigenvalue diagonalization of the variance covariance matrix
             final_result = eig(data * data.transpose())
-            
+
         return final_result
 
 

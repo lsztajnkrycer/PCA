@@ -46,7 +46,7 @@ class PCA:
             self._principal_components = Utils.compute_principal_components_with_diagonalization(self.data)
 
         # Removing all unwanted principle components
-        self._principal_components = self.principal_components[,0:self.n_components]
+        self._principal_components = self.principal_components[0:self.n_components]
 
     def data(self):
         """
@@ -64,11 +64,14 @@ class PCA:
         """
         return self._principal_components
 
-    def transform(self) -> np.ndarray:
+    def transform(self, data: np.ndarray= None) -> np.ndarray:
         """
         Places the data along the dimensions of principal components
 
         :return modified data
         """
+        if data is None:
+            data = self.data
+
         transformed = (self._principal_components.transpose() * self.data.transpose())
         return transformed
