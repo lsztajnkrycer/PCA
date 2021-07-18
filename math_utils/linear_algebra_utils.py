@@ -7,7 +7,7 @@ import pandas as pd
 class Utils:
 
     @staticmethod
-    def standardize_data(data: pd.DataFrame):
+    def standardize_data(data: pd.DataFrame) -> pd.DataFrame:
         """
         Standardizes Pandas DataFrame
 
@@ -17,17 +17,22 @@ class Utils:
             data[col] = (data[col] - np.mean(data[col]))/ np.std(data[col])
 
     @staticmethod
-    def vectorize_dataframe(data: pd.DataFrame):
+    def vectorize_dataframe(data: pd.DataFrame) -> np.ndarray:
         """
-        vectorizes a pandas dataframe
+        vectorizes a pandas DataFrame. If given a numpy array to start with, returns the data as is.
 
         :param data: a pandas dataframe input
         :return: a numpy vectorization
         """
-        return data.to_numpy()
+        if type(data) == pandas.core.frame.DataFrame:
+            return data.to_numpy()
+        elif type(data) == np.ndarray:
+            return data
+        else:
+            raise AttributeError("Please input a pandas DataFrame or numpy array.")
 
     @staticmethod
-    def singular_value_decomposition(data: np.ndarray):
+    def singular_value_decomposition(data: np.ndarray) -> (np.ndarray, np.ndarray):
         """
         Performs Singular Value Decomposition on a numpy array
 
@@ -45,7 +50,7 @@ class Utils:
             raise AttributeError
 
     @staticmethod
-    def compute_eigenvector(data: np.ndarray):
+    def compute_eigenvector(data: np.ndarray) -> np.ndarray:
         """
         computes the eigenvectors of a single square array
 
@@ -65,7 +70,7 @@ class Utils:
         return vectors
 
     @staticmethod
-    def compute_principal_components_with_svd(data: np.ndarray = None):
+    def compute_principal_components_with_svd(data: np.ndarray = None) -> np.ndarray:
         """
         Computes principal components using the svd function defined earlier.
 
@@ -80,7 +85,7 @@ class Utils:
             return principal_components
 
     @staticmethod
-    def compute_principal_components_with_diagonalization(data: np.ndarray = None):
+    def compute_principal_components_with_diagonalization(data: np.ndarray = None) -> np.ndarray:
         """
         :param data: an input for which to compute principle component values
         :return: the principal components using the diagonalization method
