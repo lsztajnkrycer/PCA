@@ -1,21 +1,46 @@
-import typing 
+import typing
 import pandas as pd
+from math_utils.linear_algebra_utils import Utils
 
 class PCA:
-    
-    def __init__(self, n_components: int, data: pd.DataFrame):
+
+    def __init__(self, data: pd.DataFrame, n_components: int = 2, workflow: str = "SVD"):
         """
-        Class defining two separate PCA methodologies
-        
-        :param n_components: the number of PCA components returned
+
+        :param data:
+        :param n_components:
+        :param workflow:
         """
-        pass
-    
+        self.n_components = n_components
+        self.data = data
+        self.workflow = workflow
+        self.principal_components = None
+
+        # Standardizing and vectorizing
+        self.data = Utils.standardize_data(data)
+        self.data = Utils.vectorize_dataframe(data)
+
     def fit(self):
-        pass
-    
+        """
+        Computes principle components for a given model, based on user selection of workflow
+        """
+        if self.workflow == "SVD":
+            self.principal_components = Utils.compute_principal_components_with_svd(self.data)
+        else:
+            self.principal_components = Utils.compute_principal_components_with_diagonalization(self.data)
+
     def principal_components(self):
-        pass
-    
+        """
+        Accessor for principal component matrix
+
+        :return: principle component matrix
+        """
+        return self.principal_components
+
     def transform(self):
+        """
+        Places the data along the dimensions of principal components
+
+        @return modified data
+        """
         pass

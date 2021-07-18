@@ -24,20 +24,52 @@ class Utils:
         """
         return data.to_numpy()
 
-    def singular_value_decomposition(self):
+    def compute_covariance_matrix(self, X: np.ndarray):
+        """
+        Computes the covariance matrix for a given matrix
+
+        :return: computes the covariance of a given numpy array
+        """
+        return np.cov(X)
+
+    def singular_value_decomposition(self, data: np.ndarray):
+        """
+        Performs Singular Value Decomposition on a numpy array
+
+        :param data: an mxn numpy array.
+        :return: an mxn numpy array eigenvectors, which consists of the eigenvectors of X_transpose * X.
+        """
+        try:
+            U,S,V_trans = np.linalg.svd(data)
+            eigenvectors_xtx = np.transpose(V_trans)
+            return eigenvectors_xtx
+
+        except np.linalg.LinAlgError:
+            print('SVD computation did not converge.')
+            print('Please ensure you are using a full m x n matrix, and please try again.')
+            raise AttributeError
+
+    def compute_eigenvector(self, data: np.ndarray):
+        """
+        computes the eigenvectors of a single square array
+
+        :return: the eigenvectors of a single square array
+        """
+        try:
+            values, vectors = eig(data)
+
+        # Elaboration upon error message
+        except np.linalg.LinAlgError:
+            print("computation failed, please ensure"
+                  "you've passed in a proper n-dimensional array")
+            print("Please recall the function with proper input")
+            raise AttributeError
+
+        # Returning eigenvectors
+        return vectors
+
+    def compute_principal_components_with_svd(self):
         pass
 
-    def compute_eigenvector(self):
-
-        return eig()
-
-    def compute_covariance_matrix(self):
+    def compute_principal_components_with_diagonalization(self):
         pass
-
-
-if __name__ == "__main__":
-    util = Utils()
-    df = pd.DataFrame({"a": [1,2,3], "b":[1,2,3]})
-    print(util.vectorize_dataframe(df))
-
-
